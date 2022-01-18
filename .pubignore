@@ -1,0 +1,12 @@
+example/android
+example/ios
+example/macos
+example/test
+example/.dart_tool
+example/.idea
+example/lib/generated_plugin_registrant.dart
+example/analysis_options.yaml
+.dart_tool
+.idea
+.flutter-plugins
+.flutter-plugins-dependencies
