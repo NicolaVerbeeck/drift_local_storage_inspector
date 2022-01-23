@@ -19,12 +19,19 @@ class DriftSQLDatabaseServer implements SQLDatabaseServer {
   @override
   final Future<List<SQLTableDefinition>> tables;
 
+  @override
+  final Future<String> schema;
+
+  @override
+  Future<int?> get schemaVersion => SynchronousFuture(_database.schemaVersion);
+
   DriftSQLDatabaseServer({
     required this.id,
     required this.name,
     required GeneratedDatabase database,
     this.icon,
   })  : _database = database,
+        schema = _buildSchema(database),
         tables = SynchronousFuture(_buildTables(database));
 
   @override
@@ -54,7 +61,20 @@ class DriftSQLDatabaseServer implements SQLDatabaseServer {
   }
 
   @override
-  Future<int?> get schemaVersion => SynchronousFuture(_database.schemaVersion);
+  Future<int> update(
+    String query, {
+    required List<String> affectedTables,
+    required List<ValueWithType> variables,
+  }) async {
+    final numUpdated = await _database.customUpdate(
+      query,
+      updates: _database.allTables
+          .where((element) => affectedTables.contains(element.actualTableName))
+          .toSet(),
+      variables: variables.map(_mapVariable).toList(),
+    );
+    return numUpdated;
+  }
 }
 
 List<SQLTableDefinition> _buildTables(
@@ -81,6 +101,21 @@ List<SQLTableDefinition> _buildTables(
       primaryKey: tableInfo.$primaryKey.map((column) => column.$name).toList(),
     );
   }).toList();
+}
+
+Future<String> _buildSchema(GeneratedDatabase database) async {
+  return database.customSelect('SELECT sql from sqlite_schema').get().then(
+    (rows) {
+      final buffer = StringBuffer();
+      for (final row in rows) {
+        if (buffer.isNotEmpty) buffer.write('\n');
+        buffer
+          ..write(row.data['sql'].toString())
+          ..write(';');
+      }
+      return buffer.toString();
+    },
+  );
 }
 
 SQLDataType _makeType(

@@ -10,3 +10,4 @@ example/analysis_options.yaml
 .idea
 .flutter-plugins
 .flutter-plugins-dependencies
+example/build
