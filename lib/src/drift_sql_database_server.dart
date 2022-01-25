@@ -125,7 +125,12 @@ SQLDataType _makeType(
   if (type is BoolType) return SQLDataType.boolean;
   if (type is RealType) return SQLDataType.real;
   if (type is StringType) return SQLDataType.text;
-  if (type is DateTimeType) return SQLDataType.datetime;
+  if (type is DateTimeType ||
+      (type is IntType &&
+          (column is GeneratedColumn<DateTime> ||
+              column is GeneratedColumn<DateTime?>))) {
+    return SQLDataType.datetime;
+  }
   if (type is IntType) return SQLDataType.integer;
   if (type is BlobType) return SQLDataType.blob;
   throw ArgumentError('Unknown column type: $type');
