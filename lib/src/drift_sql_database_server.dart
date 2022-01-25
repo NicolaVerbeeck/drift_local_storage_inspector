@@ -20,6 +20,9 @@ class DriftSQLDatabaseServer implements SQLDatabaseServer {
   final Future<List<SQLTableDefinition>> tables;
 
   @override
+  final Future<DateTimeFormat> dateTimeFormat;
+
+  @override
   final Future<String> schema;
 
   @override
@@ -32,7 +35,12 @@ class DriftSQLDatabaseServer implements SQLDatabaseServer {
     this.icon,
   })  : _database = database,
         schema = _buildSchema(database),
-        tables = SynchronousFuture(_buildTables(database));
+        tables = SynchronousFuture(_buildTables(database)),
+        dateTimeFormat = SynchronousFuture(DateTimeFormat(
+          accuracyInMicroSeconds: 1000000,
+          timezoneOffsetMilliseconds:
+              DateTime.now().timeZoneOffset.inMilliseconds,
+        ));
 
   @override
   Future<QueryResult> query(
