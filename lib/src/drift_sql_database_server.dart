@@ -36,10 +36,9 @@ class DriftSQLDatabaseServer implements SQLDatabaseServer {
   })  : _database = database,
         schema = _buildSchema(database),
         tables = SynchronousFuture(_buildTables(database)),
-        dateTimeFormat = SynchronousFuture(DateTimeFormat(
+        dateTimeFormat = SynchronousFuture(const DateTimeFormat(
           accuracyInMicroSeconds: 1000000,
-          timezoneOffsetMilliseconds:
-              DateTime.now().timeZoneOffset.inMilliseconds,
+          timezoneOffsetMilliseconds: 0,
         ));
 
   @override
