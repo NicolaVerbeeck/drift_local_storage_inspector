@@ -1,3 +1,7 @@
+## 0.1.5
+
+* Allow passing a table sorter when creating the server. Defaults to alphabetical sorting
+
 ## 0.1.4
 
 * Fix wrong assumption about time zones in drift

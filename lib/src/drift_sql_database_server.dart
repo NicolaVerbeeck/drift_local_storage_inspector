@@ -2,6 +2,11 @@ import 'package:drift/drift.dart';
 import 'package:flutter/foundation.dart';
 import 'package:storage_inspector/storage_inspector.dart';
 
+/// Sorts tables based on their name
+void _defaultTableSorter(List<SQLTableDefinition> toSort) {
+  toSort.sort((a, b) => a.name.compareTo(b.name));
+}
+
 /// [SQLDatabaseServer] implementation that wraps
 /// drift's [GeneratedDatabase]
 class DriftSQLDatabaseServer implements SQLDatabaseServer {
@@ -33,9 +38,10 @@ class DriftSQLDatabaseServer implements SQLDatabaseServer {
     required this.name,
     required GeneratedDatabase database,
     this.icon,
+    void Function(List<SQLTableDefinition>)? tableSorter = _defaultTableSorter,
   })  : _database = database,
         schema = _buildSchema(database),
-        tables = SynchronousFuture(_buildTables(database)),
+        tables = SynchronousFuture(_buildTables(database, tableSorter)),
         dateTimeFormat = SynchronousFuture(const DateTimeFormat(
           accuracyInMicroSeconds: 1000000,
           timezoneOffsetMilliseconds: 0,
@@ -86,8 +92,9 @@ class DriftSQLDatabaseServer implements SQLDatabaseServer {
 
 List<SQLTableDefinition> _buildTables(
   GeneratedDatabase database,
+  void Function(List<SQLTableDefinition>)? tableSorter,
 ) {
-  return database.allTables.map((tableInfo) {
+  final tables = database.allTables.map((tableInfo) {
     final extensions = <SQLTableExtension>[];
     if (tableInfo.withoutRowId) {
       extensions.add(SQLTableExtension.withoutRowId);
@@ -108,6 +115,10 @@ List<SQLTableDefinition> _buildTables(
       primaryKey: tableInfo.$primaryKey.map((column) => column.$name).toList(),
     );
   }).toList();
+  if (tableSorter != null) {
+    tableSorter(tables);
+  }
+  return tables;
 }
 
 Future<String> _buildSchema(GeneratedDatabase database) async {
