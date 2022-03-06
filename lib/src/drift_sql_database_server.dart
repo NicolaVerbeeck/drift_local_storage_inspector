@@ -106,6 +106,7 @@ List<SQLTableDefinition> _buildTables(
         type: _makeType(column),
         nullable: column.$nullable,
         autoIncrement: column.hasAutoIncrement,
+        defaultValueExpression: column.defaultValue?.writeAsString(database),
       );
     }).toList();
     return SQLTableDefinition(
@@ -175,5 +176,13 @@ Variable<dynamic> _mapVariable(
       return Variable.withBool(e.value as bool);
     case StorageType.stringList:
       throw ArgumentError('String lists are not supported by SQL');
+  }
+}
+
+extension _ExpressionExtension on Expression {
+  String writeAsString(DatabaseConnectionUser db) {
+    final context = GenerationContext.fromDb(db);
+    writeInto(context);
+    return context.buffer.toString();
   }
 }

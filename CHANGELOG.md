@@ -1,3 +1,8 @@
+## 0.1.6
+
+* Upgrade to local storage inspector 0.1.6:
+  * Support passing default value for column
+
 ## 0.1.5
 
 * Allow passing a table sorter when creating the server. Defaults to alphabetical sorting
