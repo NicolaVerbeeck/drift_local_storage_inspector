@@ -1,3 +1,8 @@
+## 0.2.3
+
+* Upgrade to local storage inspector 0.2.x
+* Align version numbers
+
 ## 0.1.6
 
 * Upgrade to local storage inspector 0.1.6:

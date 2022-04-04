@@ -16,7 +16,7 @@ Future<void> main() async {
   final db = NativeDatabase.memory();
   final driftDb = MyDatabase(db);
 
-  final res = await driftDb.customSelect("SELECT sql from sqlite_schema").get();
+  await driftDb.customSelect("SELECT sql from sqlite_schema").get();
 
   final sqlServer = DriftSQLDatabaseServer(
     id: "1",
