@@ -141,25 +141,29 @@ SQLDataType _makeType(
   GeneratedColumn<dynamic> column,
 ) {
   final type = column.type;
-  if (type is BoolType) return SQLDataType.boolean;
-  if (type is RealType) return SQLDataType.real;
-  if (type is StringType) return SQLDataType.text;
-  if (type is DateTimeType ||
-      (type is IntType &&
-          (column is GeneratedColumn<DateTime> ||
-              column is GeneratedColumn<DateTime?>))) {
-    return SQLDataType.datetime;
+  switch (type) {
+    case DriftSqlType.bool:
+      return SQLDataType.boolean;
+    case DriftSqlType.string:
+      return SQLDataType.text;
+    case DriftSqlType.bigInt:
+      return SQLDataType.integer;
+    case DriftSqlType.int:
+      return SQLDataType.integer;
+    case DriftSqlType.dateTime:
+      return SQLDataType.datetime;
+    case DriftSqlType.blob:
+      return SQLDataType.blob;
+    case DriftSqlType.double:
+      return SQLDataType.real;
   }
-  if (type is IntType) return SQLDataType.integer;
-  if (type is BlobType) return SQLDataType.blob;
-  throw ArgumentError('Unknown column type: $type');
 }
 
-Variable<dynamic> _mapVariable(
+Variable<Object> _mapVariable(
   ValueWithType e,
 ) {
   if (e.value == null) {
-    return const Variable<dynamic>(null);
+    return const Variable<Object>(null);
   }
   switch (e.type) {
     case StorageType.string:
