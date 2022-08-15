@@ -1,3 +1,7 @@
+## 0.3.0
+
+* Upgrade to drift v2
+
 ## 0.2.3
 
 * Upgrade to local storage inspector 0.2.x

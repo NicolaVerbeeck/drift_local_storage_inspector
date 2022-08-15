@@ -28,11 +28,13 @@ Future<void> main() async {
 
   await driver.start(paused: false);
 
-  runApp(const MyApp());
+  runApp(MyApp(db: driftDb));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  final MyDatabase db;
+
+  const MyApp({Key? key, required this.db}) : super(key: key);
 
   // This widget is the root of your application.
   @override
@@ -42,15 +44,17 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: MyHomePage(db: db, title: 'Flutter Demo Home Page'),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
-
+  final MyDatabase db;
   final String title;
+
+  const MyHomePage({Key? key, required this.title, required this.db})
+      : super(key: key);
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -60,6 +64,12 @@ class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
 
   void _incrementCounter() {
+    final toInsert = ATodoDontCompanion.insert(
+        textWithRestrictions: 'Some text',
+        booleanTest: true,
+        dateTimeTest: DateTime.now());
+    widget.db.into(widget.db.aTodoDont).insert(toInsert);
+
     setState(() {
       _counter++;
     });

@@ -3,10 +3,10 @@
 part of 'driftdb.dart';
 
 // **************************************************************************
-// MoorGenerator
+// DriftDatabaseGenerator
 // **************************************************************************
 
-// ignore_for_file: unnecessary_brace_in_string_interps, unnecessary_this
+// ignore_for_file: type=lint
 class Todo extends DataClass implements Insertable<Todo> {
   final int id;
   final String textWithRestrictions;
@@ -15,7 +15,7 @@ class Todo extends DataClass implements Insertable<Todo> {
   final bool booleanTest;
   final DateTime dateTimeTest;
   final Uint8List? blobTest;
-  Todo(
+  const Todo(
       {required this.id,
       required this.textWithRestrictions,
       required this.realTest,
@@ -23,25 +23,6 @@ class Todo extends DataClass implements Insertable<Todo> {
       required this.booleanTest,
       required this.dateTimeTest,
       this.blobTest});
-  factory Todo.fromData(Map<String, dynamic> data, {String? prefix}) {
-    final effectivePrefix = prefix ?? '';
-    return Todo(
-      id: const IntType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}id'])!,
-      textWithRestrictions: const StringType().mapFromDatabaseResponse(
-          data['${effectivePrefix}text_with_restrictions'])!,
-      realTest: const RealType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}real_test'])!,
-      category: const IntType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}category']),
-      booleanTest: const BoolType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}boolean_test'])!,
-      dateTimeTest: const DateTimeType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}date_time_test'])!,
-      blobTest: const BlobType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}blob_test']),
-    );
-  }
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -49,12 +30,12 @@ class Todo extends DataClass implements Insertable<Todo> {
     map['text_with_restrictions'] = Variable<String>(textWithRestrictions);
     map['real_test'] = Variable<double>(realTest);
     if (!nullToAbsent || category != null) {
-      map['category'] = Variable<int?>(category);
+      map['category'] = Variable<int>(category);
     }
     map['boolean_test'] = Variable<bool>(booleanTest);
     map['date_time_test'] = Variable<DateTime>(dateTimeTest);
     if (!nullToAbsent || blobTest != null) {
-      map['blob_test'] = Variable<Uint8List?>(blobTest);
+      map['blob_test'] = Variable<Uint8List>(blobTest);
     }
     return map;
   }
@@ -107,18 +88,18 @@ class Todo extends DataClass implements Insertable<Todo> {
           {int? id,
           String? textWithRestrictions,
           double? realTest,
-          int? category,
+          Value<int?> category = const Value.absent(),
           bool? booleanTest,
           DateTime? dateTimeTest,
-          Uint8List? blobTest}) =>
+          Value<Uint8List?> blobTest = const Value.absent()}) =>
       Todo(
         id: id ?? this.id,
         textWithRestrictions: textWithRestrictions ?? this.textWithRestrictions,
         realTest: realTest ?? this.realTest,
-        category: category ?? this.category,
+        category: category.present ? category.value : this.category,
         booleanTest: booleanTest ?? this.booleanTest,
         dateTimeTest: dateTimeTest ?? this.dateTimeTest,
-        blobTest: blobTest ?? this.blobTest,
+        blobTest: blobTest.present ? blobTest.value : this.blobTest,
       );
   @override
   String toString() {
@@ -182,10 +163,10 @@ class TodosCompanion extends UpdateCompanion<Todo> {
     Expression<int>? id,
     Expression<String>? textWithRestrictions,
     Expression<double>? realTest,
-    Expression<int?>? category,
+    Expression<int>? category,
     Expression<bool>? booleanTest,
     Expression<DateTime>? dateTimeTest,
-    Expression<Uint8List?>? blobTest,
+    Expression<Uint8List>? blobTest,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -232,7 +213,7 @@ class TodosCompanion extends UpdateCompanion<Todo> {
       map['real_test'] = Variable<double>(realTest.value);
     }
     if (category.present) {
-      map['category'] = Variable<int?>(category.value);
+      map['category'] = Variable<int>(category.value);
     }
     if (booleanTest.present) {
       map['boolean_test'] = Variable<bool>(booleanTest.value);
@@ -241,7 +222,7 @@ class TodosCompanion extends UpdateCompanion<Todo> {
       map['date_time_test'] = Variable<DateTime>(dateTimeTest.value);
     }
     if (blobTest.present) {
-      map['blob_test'] = Variable<Uint8List?>(blobTest.value);
+      map['blob_test'] = Variable<Uint8List>(blobTest.value);
     }
     return map;
   }
@@ -268,51 +249,52 @@ class $TodosTable extends Todos with TableInfo<$TodosTable, Todo> {
   $TodosTable(this.attachedDatabase, [this._alias]);
   final VerificationMeta _idMeta = const VerificationMeta('id');
   @override
-  late final GeneratedColumn<int?> id = GeneratedColumn<int?>(
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
       'id', aliasedName, false,
-      type: const IntType(),
+      type: DriftSqlType.int,
       requiredDuringInsert: false,
       defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
   final VerificationMeta _textWithRestrictionsMeta =
       const VerificationMeta('textWithRestrictions');
   @override
-  late final GeneratedColumn<String?> textWithRestrictions =
-      GeneratedColumn<String?>('text_with_restrictions', aliasedName, false,
+  late final GeneratedColumn<String> textWithRestrictions =
+      GeneratedColumn<String>(
+          'text_with_restrictions', aliasedName, false,
           additionalChecks: GeneratedColumn.checkTextLength(
               minTextLength: 6, maxTextLength: 32),
-          type: const StringType(),
+          type: DriftSqlType.string,
           requiredDuringInsert: true);
   final VerificationMeta _realTestMeta = const VerificationMeta('realTest');
   @override
-  late final GeneratedColumn<double?> realTest = GeneratedColumn<double?>(
+  late final GeneratedColumn<double> realTest = GeneratedColumn<double>(
       'real_test', aliasedName, false,
-      type: const RealType(),
+      type: DriftSqlType.double,
       requiredDuringInsert: false,
       defaultValue: const Constant(3.14));
   final VerificationMeta _categoryMeta = const VerificationMeta('category');
   @override
-  late final GeneratedColumn<int?> category = GeneratedColumn<int?>(
+  late final GeneratedColumn<int> category = GeneratedColumn<int>(
       'category', aliasedName, true,
-      type: const IntType(), requiredDuringInsert: false);
+      type: DriftSqlType.int, requiredDuringInsert: false);
   final VerificationMeta _booleanTestMeta =
       const VerificationMeta('booleanTest');
   @override
-  late final GeneratedColumn<bool?> booleanTest = GeneratedColumn<bool?>(
+  late final GeneratedColumn<bool> booleanTest = GeneratedColumn<bool>(
       'boolean_test', aliasedName, false,
-      type: const BoolType(),
+      type: DriftSqlType.bool,
       requiredDuringInsert: true,
       defaultConstraints: 'CHECK (boolean_test IN (0, 1))');
   final VerificationMeta _dateTimeTestMeta =
       const VerificationMeta('dateTimeTest');
   @override
-  late final GeneratedColumn<DateTime?> dateTimeTest =
-      GeneratedColumn<DateTime?>('date_time_test', aliasedName, false,
-          type: const IntType(), requiredDuringInsert: true);
+  late final GeneratedColumn<DateTime> dateTimeTest = GeneratedColumn<DateTime>(
+      'date_time_test', aliasedName, false,
+      type: DriftSqlType.dateTime, requiredDuringInsert: true);
   final VerificationMeta _blobTestMeta = const VerificationMeta('blobTest');
   @override
-  late final GeneratedColumn<Uint8List?> blobTest = GeneratedColumn<Uint8List?>(
+  late final GeneratedColumn<Uint8List> blobTest = GeneratedColumn<Uint8List>(
       'blob_test', aliasedName, true,
-      type: const BlobType(), requiredDuringInsert: false);
+      type: DriftSqlType.blob, requiredDuringInsert: false);
   @override
   List<GeneratedColumn> get $columns => [
         id,
@@ -378,8 +360,24 @@ class $TodosTable extends Todos with TableInfo<$TodosTable, Todo> {
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
   Todo map(Map<String, dynamic> data, {String? tablePrefix}) {
-    return Todo.fromData(data,
-        prefix: tablePrefix != null ? '$tablePrefix.' : null);
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return Todo(
+      id: attachedDatabase.options.types
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      textWithRestrictions: attachedDatabase.options.types.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}text_with_restrictions'])!,
+      realTest: attachedDatabase.options.types
+          .read(DriftSqlType.double, data['${effectivePrefix}real_test'])!,
+      category: attachedDatabase.options.types
+          .read(DriftSqlType.int, data['${effectivePrefix}category']),
+      booleanTest: attachedDatabase.options.types
+          .read(DriftSqlType.bool, data['${effectivePrefix}boolean_test'])!,
+      dateTimeTest: attachedDatabase.options.types.read(
+          DriftSqlType.dateTime, data['${effectivePrefix}date_time_test'])!,
+      blobTest: attachedDatabase.options.types
+          .read(DriftSqlType.blob, data['${effectivePrefix}blob_test']),
+    );
   }
 
   @override
@@ -396,7 +394,7 @@ class ATodoDontData extends DataClass implements Insertable<ATodoDontData> {
   final bool booleanTest;
   final DateTime dateTimeTest;
   final Uint8List? blobTest;
-  ATodoDontData(
+  const ATodoDontData(
       {required this.id,
       required this.textWithRestrictions,
       required this.realTest,
@@ -404,25 +402,6 @@ class ATodoDontData extends DataClass implements Insertable<ATodoDontData> {
       required this.booleanTest,
       required this.dateTimeTest,
       this.blobTest});
-  factory ATodoDontData.fromData(Map<String, dynamic> data, {String? prefix}) {
-    final effectivePrefix = prefix ?? '';
-    return ATodoDontData(
-      id: const IntType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}id'])!,
-      textWithRestrictions: const StringType().mapFromDatabaseResponse(
-          data['${effectivePrefix}text_with_restrictions'])!,
-      realTest: const RealType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}real_test'])!,
-      category: const IntType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}category']),
-      booleanTest: const BoolType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}boolean_test'])!,
-      dateTimeTest: const DateTimeType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}date_time_test'])!,
-      blobTest: const BlobType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}blob_test']),
-    );
-  }
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -430,12 +409,12 @@ class ATodoDontData extends DataClass implements Insertable<ATodoDontData> {
     map['text_with_restrictions'] = Variable<String>(textWithRestrictions);
     map['real_test'] = Variable<double>(realTest);
     if (!nullToAbsent || category != null) {
-      map['category'] = Variable<int?>(category);
+      map['category'] = Variable<int>(category);
     }
     map['boolean_test'] = Variable<bool>(booleanTest);
     map['date_time_test'] = Variable<DateTime>(dateTimeTest);
     if (!nullToAbsent || blobTest != null) {
-      map['blob_test'] = Variable<Uint8List?>(blobTest);
+      map['blob_test'] = Variable<Uint8List>(blobTest);
     }
     return map;
   }
@@ -488,18 +467,18 @@ class ATodoDontData extends DataClass implements Insertable<ATodoDontData> {
           {int? id,
           String? textWithRestrictions,
           double? realTest,
-          int? category,
+          Value<int?> category = const Value.absent(),
           bool? booleanTest,
           DateTime? dateTimeTest,
-          Uint8List? blobTest}) =>
+          Value<Uint8List?> blobTest = const Value.absent()}) =>
       ATodoDontData(
         id: id ?? this.id,
         textWithRestrictions: textWithRestrictions ?? this.textWithRestrictions,
         realTest: realTest ?? this.realTest,
-        category: category ?? this.category,
+        category: category.present ? category.value : this.category,
         booleanTest: booleanTest ?? this.booleanTest,
         dateTimeTest: dateTimeTest ?? this.dateTimeTest,
-        blobTest: blobTest ?? this.blobTest,
+        blobTest: blobTest.present ? blobTest.value : this.blobTest,
       );
   @override
   String toString() {
@@ -563,10 +542,10 @@ class ATodoDontCompanion extends UpdateCompanion<ATodoDontData> {
     Expression<int>? id,
     Expression<String>? textWithRestrictions,
     Expression<double>? realTest,
-    Expression<int?>? category,
+    Expression<int>? category,
     Expression<bool>? booleanTest,
     Expression<DateTime>? dateTimeTest,
-    Expression<Uint8List?>? blobTest,
+    Expression<Uint8List>? blobTest,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -613,7 +592,7 @@ class ATodoDontCompanion extends UpdateCompanion<ATodoDontData> {
       map['real_test'] = Variable<double>(realTest.value);
     }
     if (category.present) {
-      map['category'] = Variable<int?>(category.value);
+      map['category'] = Variable<int>(category.value);
     }
     if (booleanTest.present) {
       map['boolean_test'] = Variable<bool>(booleanTest.value);
@@ -622,7 +601,7 @@ class ATodoDontCompanion extends UpdateCompanion<ATodoDontData> {
       map['date_time_test'] = Variable<DateTime>(dateTimeTest.value);
     }
     if (blobTest.present) {
-      map['blob_test'] = Variable<Uint8List?>(blobTest.value);
+      map['blob_test'] = Variable<Uint8List>(blobTest.value);
     }
     return map;
   }
@@ -650,51 +629,52 @@ class $ATodoDontTable extends ATodoDont
   $ATodoDontTable(this.attachedDatabase, [this._alias]);
   final VerificationMeta _idMeta = const VerificationMeta('id');
   @override
-  late final GeneratedColumn<int?> id = GeneratedColumn<int?>(
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
       'id', aliasedName, false,
-      type: const IntType(),
+      type: DriftSqlType.int,
       requiredDuringInsert: false,
       defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
   final VerificationMeta _textWithRestrictionsMeta =
       const VerificationMeta('textWithRestrictions');
   @override
-  late final GeneratedColumn<String?> textWithRestrictions =
-      GeneratedColumn<String?>('text_with_restrictions', aliasedName, false,
+  late final GeneratedColumn<String> textWithRestrictions =
+      GeneratedColumn<String>(
+          'text_with_restrictions', aliasedName, false,
           additionalChecks: GeneratedColumn.checkTextLength(
               minTextLength: 6, maxTextLength: 32),
-          type: const StringType(),
+          type: DriftSqlType.string,
           requiredDuringInsert: true);
   final VerificationMeta _realTestMeta = const VerificationMeta('realTest');
   @override
-  late final GeneratedColumn<double?> realTest = GeneratedColumn<double?>(
+  late final GeneratedColumn<double> realTest = GeneratedColumn<double>(
       'real_test', aliasedName, false,
-      type: const RealType(),
+      type: DriftSqlType.double,
       requiredDuringInsert: false,
       defaultValue: const Constant(3.14));
   final VerificationMeta _categoryMeta = const VerificationMeta('category');
   @override
-  late final GeneratedColumn<int?> category = GeneratedColumn<int?>(
+  late final GeneratedColumn<int> category = GeneratedColumn<int>(
       'category', aliasedName, true,
-      type: const IntType(), requiredDuringInsert: false);
+      type: DriftSqlType.int, requiredDuringInsert: false);
   final VerificationMeta _booleanTestMeta =
       const VerificationMeta('booleanTest');
   @override
-  late final GeneratedColumn<bool?> booleanTest = GeneratedColumn<bool?>(
+  late final GeneratedColumn<bool> booleanTest = GeneratedColumn<bool>(
       'boolean_test', aliasedName, false,
-      type: const BoolType(),
+      type: DriftSqlType.bool,
       requiredDuringInsert: true,
       defaultConstraints: 'CHECK (boolean_test IN (0, 1))');
   final VerificationMeta _dateTimeTestMeta =
       const VerificationMeta('dateTimeTest');
   @override
-  late final GeneratedColumn<DateTime?> dateTimeTest =
-      GeneratedColumn<DateTime?>('date_time_test', aliasedName, false,
-          type: const IntType(), requiredDuringInsert: true);
+  late final GeneratedColumn<DateTime> dateTimeTest = GeneratedColumn<DateTime>(
+      'date_time_test', aliasedName, false,
+      type: DriftSqlType.dateTime, requiredDuringInsert: true);
   final VerificationMeta _blobTestMeta = const VerificationMeta('blobTest');
   @override
-  late final GeneratedColumn<Uint8List?> blobTest = GeneratedColumn<Uint8List?>(
+  late final GeneratedColumn<Uint8List> blobTest = GeneratedColumn<Uint8List>(
       'blob_test', aliasedName, true,
-      type: const BlobType(), requiredDuringInsert: false);
+      type: DriftSqlType.blob, requiredDuringInsert: false);
   @override
   List<GeneratedColumn> get $columns => [
         id,
@@ -760,8 +740,24 @@ class $ATodoDontTable extends ATodoDont
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
   ATodoDontData map(Map<String, dynamic> data, {String? tablePrefix}) {
-    return ATodoDontData.fromData(data,
-        prefix: tablePrefix != null ? '$tablePrefix.' : null);
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return ATodoDontData(
+      id: attachedDatabase.options.types
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      textWithRestrictions: attachedDatabase.options.types.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}text_with_restrictions'])!,
+      realTest: attachedDatabase.options.types
+          .read(DriftSqlType.double, data['${effectivePrefix}real_test'])!,
+      category: attachedDatabase.options.types
+          .read(DriftSqlType.int, data['${effectivePrefix}category']),
+      booleanTest: attachedDatabase.options.types
+          .read(DriftSqlType.bool, data['${effectivePrefix}boolean_test'])!,
+      dateTimeTest: attachedDatabase.options.types.read(
+          DriftSqlType.dateTime, data['${effectivePrefix}date_time_test'])!,
+      blobTest: attachedDatabase.options.types
+          .read(DriftSqlType.blob, data['${effectivePrefix}blob_test']),
+    );
   }
 
   @override
@@ -771,11 +767,12 @@ class $ATodoDontTable extends ATodoDont
 }
 
 abstract class _$MyDatabase extends GeneratedDatabase {
-  _$MyDatabase(QueryExecutor e) : super(SqlTypeSystem.defaultInstance, e);
+  _$MyDatabase(QueryExecutor e) : super(e);
   late final $TodosTable todos = $TodosTable(this);
   late final $ATodoDontTable aTodoDont = $ATodoDontTable(this);
   @override
-  Iterable<TableInfo> get allTables => allSchemaEntities.whereType<TableInfo>();
+  Iterable<TableInfo<Table, dynamic>> get allTables =>
+      allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
   List<DatabaseSchemaEntity> get allSchemaEntities => [todos, aTodoDont];
 }
