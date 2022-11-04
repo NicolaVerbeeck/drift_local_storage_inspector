@@ -1,3 +1,8 @@
+## 0.4.0
+
+* Upgrade dependencies
+* Added funding options
+
 ## 0.3.0
 
 * Upgrade to drift v2

@@ -117,7 +117,7 @@ class Todo extends DataClass implements Insertable<Todo> {
 
   @override
   int get hashCode => Object.hash(id, textWithRestrictions, realTest, category,
-      booleanTest, dateTimeTest, blobTest);
+      booleanTest, dateTimeTest, $driftBlobEquality.hash(blobTest));
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -128,7 +128,7 @@ class Todo extends DataClass implements Insertable<Todo> {
           other.category == this.category &&
           other.booleanTest == this.booleanTest &&
           other.dateTimeTest == this.dateTimeTest &&
-          other.blobTest == this.blobTest);
+          $driftBlobEquality.equals(other.blobTest, this.blobTest));
 }
 
 class TodosCompanion extends UpdateCompanion<Todo> {
@@ -283,7 +283,7 @@ class $TodosTable extends Todos with TableInfo<$TodosTable, Todo> {
       'boolean_test', aliasedName, false,
       type: DriftSqlType.bool,
       requiredDuringInsert: true,
-      defaultConstraints: 'CHECK (boolean_test IN (0, 1))');
+      defaultConstraints: 'CHECK ("boolean_test" IN (0, 1))');
   final VerificationMeta _dateTimeTestMeta =
       const VerificationMeta('dateTimeTest');
   @override
@@ -496,7 +496,7 @@ class ATodoDontData extends DataClass implements Insertable<ATodoDontData> {
 
   @override
   int get hashCode => Object.hash(id, textWithRestrictions, realTest, category,
-      booleanTest, dateTimeTest, blobTest);
+      booleanTest, dateTimeTest, $driftBlobEquality.hash(blobTest));
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -507,7 +507,7 @@ class ATodoDontData extends DataClass implements Insertable<ATodoDontData> {
           other.category == this.category &&
           other.booleanTest == this.booleanTest &&
           other.dateTimeTest == this.dateTimeTest &&
-          other.blobTest == this.blobTest);
+          $driftBlobEquality.equals(other.blobTest, this.blobTest));
 }
 
 class ATodoDontCompanion extends UpdateCompanion<ATodoDontData> {
@@ -663,7 +663,7 @@ class $ATodoDontTable extends ATodoDont
       'boolean_test', aliasedName, false,
       type: DriftSqlType.bool,
       requiredDuringInsert: true,
-      defaultConstraints: 'CHECK (boolean_test IN (0, 1))');
+      defaultConstraints: 'CHECK ("boolean_test" IN (0, 1))');
   final VerificationMeta _dateTimeTestMeta =
       const VerificationMeta('dateTimeTest');
   @override
