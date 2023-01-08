@@ -1,3 +1,7 @@
+## 0.5.0
+
+* Add support for drift 2.4.0
+
 ## 0.4.0
 
 * Upgrade dependencies

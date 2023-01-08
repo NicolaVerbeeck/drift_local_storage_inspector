@@ -11,3 +11,5 @@ example/analysis_options.yaml
 .flutter-plugins
 .flutter-plugins-dependencies
 example/build
+build/
+*.iml

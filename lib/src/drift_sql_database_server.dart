@@ -156,6 +156,8 @@ SQLDataType _makeType(
       return SQLDataType.blob;
     case DriftSqlType.double:
       return SQLDataType.real;
+    case DriftSqlType.any:
+      return SQLDataType.text;
   }
 }
 
