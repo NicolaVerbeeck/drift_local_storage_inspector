@@ -2,11 +2,157 @@
 
 part of 'driftdb.dart';
 
-// **************************************************************************
-// DriftDatabaseGenerator
-// **************************************************************************
-
 // ignore_for_file: type=lint
+class $TodosTable extends Todos with TableInfo<$TodosTable, Todo> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $TodosTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _textWithRestrictionsMeta =
+      const VerificationMeta('textWithRestrictions');
+  @override
+  late final GeneratedColumn<String> textWithRestrictions =
+      GeneratedColumn<String>(
+          'text_with_restrictions', aliasedName, false,
+          additionalChecks: GeneratedColumn.checkTextLength(
+              minTextLength: 6, maxTextLength: 32),
+          type: DriftSqlType.string,
+          requiredDuringInsert: true);
+  static const VerificationMeta _realTestMeta =
+      const VerificationMeta('realTest');
+  @override
+  late final GeneratedColumn<double> realTest = GeneratedColumn<double>(
+      'real_test', aliasedName, false,
+      type: DriftSqlType.double,
+      requiredDuringInsert: false,
+      defaultValue: const Constant(3.14));
+  static const VerificationMeta _categoryMeta =
+      const VerificationMeta('category');
+  @override
+  late final GeneratedColumn<int> category = GeneratedColumn<int>(
+      'category', aliasedName, true,
+      type: DriftSqlType.int, requiredDuringInsert: false);
+  static const VerificationMeta _booleanTestMeta =
+      const VerificationMeta('booleanTest');
+  @override
+  late final GeneratedColumn<bool> booleanTest = GeneratedColumn<bool>(
+      'boolean_test', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: true,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'CHECK ("boolean_test" IN (0, 1))'));
+  static const VerificationMeta _dateTimeTestMeta =
+      const VerificationMeta('dateTimeTest');
+  @override
+  late final GeneratedColumn<DateTime> dateTimeTest = GeneratedColumn<DateTime>(
+      'date_time_test', aliasedName, false,
+      type: DriftSqlType.dateTime, requiredDuringInsert: true);
+  static const VerificationMeta _blobTestMeta =
+      const VerificationMeta('blobTest');
+  @override
+  late final GeneratedColumn<Uint8List> blobTest = GeneratedColumn<Uint8List>(
+      'blob_test', aliasedName, true,
+      type: DriftSqlType.blob, requiredDuringInsert: false);
+  @override
+  List<GeneratedColumn> get $columns => [
+        id,
+        textWithRestrictions,
+        realTest,
+        category,
+        booleanTest,
+        dateTimeTest,
+        blobTest
+      ];
+  @override
+  String get aliasedName => _alias ?? 'todos';
+  @override
+  String get actualTableName => 'todos';
+  @override
+  VerificationContext validateIntegrity(Insertable<Todo> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('text_with_restrictions')) {
+      context.handle(
+          _textWithRestrictionsMeta,
+          textWithRestrictions.isAcceptableOrUnknown(
+              data['text_with_restrictions']!, _textWithRestrictionsMeta));
+    } else if (isInserting) {
+      context.missing(_textWithRestrictionsMeta);
+    }
+    if (data.containsKey('real_test')) {
+      context.handle(_realTestMeta,
+          realTest.isAcceptableOrUnknown(data['real_test']!, _realTestMeta));
+    }
+    if (data.containsKey('category')) {
+      context.handle(_categoryMeta,
+          category.isAcceptableOrUnknown(data['category']!, _categoryMeta));
+    }
+    if (data.containsKey('boolean_test')) {
+      context.handle(
+          _booleanTestMeta,
+          booleanTest.isAcceptableOrUnknown(
+              data['boolean_test']!, _booleanTestMeta));
+    } else if (isInserting) {
+      context.missing(_booleanTestMeta);
+    }
+    if (data.containsKey('date_time_test')) {
+      context.handle(
+          _dateTimeTestMeta,
+          dateTimeTest.isAcceptableOrUnknown(
+              data['date_time_test']!, _dateTimeTestMeta));
+    } else if (isInserting) {
+      context.missing(_dateTimeTestMeta);
+    }
+    if (data.containsKey('blob_test')) {
+      context.handle(_blobTestMeta,
+          blobTest.isAcceptableOrUnknown(data['blob_test']!, _blobTestMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  Todo map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return Todo(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      textWithRestrictions: attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}text_with_restrictions'])!,
+      realTest: attachedDatabase.typeMapping
+          .read(DriftSqlType.double, data['${effectivePrefix}real_test'])!,
+      category: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}category']),
+      booleanTest: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}boolean_test'])!,
+      dateTimeTest: attachedDatabase.typeMapping.read(
+          DriftSqlType.dateTime, data['${effectivePrefix}date_time_test'])!,
+      blobTest: attachedDatabase.typeMapping
+          .read(DriftSqlType.blob, data['${effectivePrefix}blob_test']),
+    );
+  }
+
+  @override
+  $TodosTable createAlias(String alias) {
+    return $TodosTable(attachedDatabase, alias);
+  }
+}
+
 class Todo extends DataClass implements Insertable<Todo> {
   final int id;
   final String textWithRestrictions;
@@ -242,19 +388,22 @@ class TodosCompanion extends UpdateCompanion<Todo> {
   }
 }
 
-class $TodosTable extends Todos with TableInfo<$TodosTable, Todo> {
+class $ATodoDontTable extends ATodoDont
+    with TableInfo<$ATodoDontTable, ATodoDontData> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $TodosTable(this.attachedDatabase, [this._alias]);
-  final VerificationMeta _idMeta = const VerificationMeta('id');
+  $ATodoDontTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<int> id = GeneratedColumn<int>(
       'id', aliasedName, false,
+      hasAutoIncrement: true,
       type: DriftSqlType.int,
       requiredDuringInsert: false,
-      defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
-  final VerificationMeta _textWithRestrictionsMeta =
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _textWithRestrictionsMeta =
       const VerificationMeta('textWithRestrictions');
   @override
   late final GeneratedColumn<String> textWithRestrictions =
@@ -264,33 +413,37 @@ class $TodosTable extends Todos with TableInfo<$TodosTable, Todo> {
               minTextLength: 6, maxTextLength: 32),
           type: DriftSqlType.string,
           requiredDuringInsert: true);
-  final VerificationMeta _realTestMeta = const VerificationMeta('realTest');
+  static const VerificationMeta _realTestMeta =
+      const VerificationMeta('realTest');
   @override
   late final GeneratedColumn<double> realTest = GeneratedColumn<double>(
       'real_test', aliasedName, false,
       type: DriftSqlType.double,
       requiredDuringInsert: false,
       defaultValue: const Constant(3.14));
-  final VerificationMeta _categoryMeta = const VerificationMeta('category');
+  static const VerificationMeta _categoryMeta =
+      const VerificationMeta('category');
   @override
   late final GeneratedColumn<int> category = GeneratedColumn<int>(
       'category', aliasedName, true,
       type: DriftSqlType.int, requiredDuringInsert: false);
-  final VerificationMeta _booleanTestMeta =
+  static const VerificationMeta _booleanTestMeta =
       const VerificationMeta('booleanTest');
   @override
   late final GeneratedColumn<bool> booleanTest = GeneratedColumn<bool>(
       'boolean_test', aliasedName, false,
       type: DriftSqlType.bool,
       requiredDuringInsert: true,
-      defaultConstraints: 'CHECK ("boolean_test" IN (0, 1))');
-  final VerificationMeta _dateTimeTestMeta =
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'CHECK ("boolean_test" IN (0, 1))'));
+  static const VerificationMeta _dateTimeTestMeta =
       const VerificationMeta('dateTimeTest');
   @override
   late final GeneratedColumn<DateTime> dateTimeTest = GeneratedColumn<DateTime>(
       'date_time_test', aliasedName, false,
       type: DriftSqlType.dateTime, requiredDuringInsert: true);
-  final VerificationMeta _blobTestMeta = const VerificationMeta('blobTest');
+  static const VerificationMeta _blobTestMeta =
+      const VerificationMeta('blobTest');
   @override
   late final GeneratedColumn<Uint8List> blobTest = GeneratedColumn<Uint8List>(
       'blob_test', aliasedName, true,
@@ -306,11 +459,11 @@ class $TodosTable extends Todos with TableInfo<$TodosTable, Todo> {
         blobTest
       ];
   @override
-  String get aliasedName => _alias ?? 'todos';
+  String get aliasedName => _alias ?? 'a_todo_dont';
   @override
-  String get actualTableName => 'todos';
+  String get actualTableName => 'a_todo_dont';
   @override
-  VerificationContext validateIntegrity(Insertable<Todo> instance,
+  VerificationContext validateIntegrity(Insertable<ATodoDontData> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
@@ -359,30 +512,30 @@ class $TodosTable extends Todos with TableInfo<$TodosTable, Todo> {
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  Todo map(Map<String, dynamic> data, {String? tablePrefix}) {
+  ATodoDontData map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return Todo(
-      id: attachedDatabase.options.types
+    return ATodoDontData(
+      id: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
-      textWithRestrictions: attachedDatabase.options.types.read(
+      textWithRestrictions: attachedDatabase.typeMapping.read(
           DriftSqlType.string,
           data['${effectivePrefix}text_with_restrictions'])!,
-      realTest: attachedDatabase.options.types
+      realTest: attachedDatabase.typeMapping
           .read(DriftSqlType.double, data['${effectivePrefix}real_test'])!,
-      category: attachedDatabase.options.types
+      category: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}category']),
-      booleanTest: attachedDatabase.options.types
+      booleanTest: attachedDatabase.typeMapping
           .read(DriftSqlType.bool, data['${effectivePrefix}boolean_test'])!,
-      dateTimeTest: attachedDatabase.options.types.read(
+      dateTimeTest: attachedDatabase.typeMapping.read(
           DriftSqlType.dateTime, data['${effectivePrefix}date_time_test'])!,
-      blobTest: attachedDatabase.options.types
+      blobTest: attachedDatabase.typeMapping
           .read(DriftSqlType.blob, data['${effectivePrefix}blob_test']),
     );
   }
 
   @override
-  $TodosTable createAlias(String alias) {
-    return $TodosTable(attachedDatabase, alias);
+  $ATodoDontTable createAlias(String alias) {
+    return $ATodoDontTable(attachedDatabase, alias);
   }
 }
 
@@ -621,157 +774,12 @@ class ATodoDontCompanion extends UpdateCompanion<ATodoDontData> {
   }
 }
 
-class $ATodoDontTable extends ATodoDont
-    with TableInfo<$ATodoDontTable, ATodoDontData> {
-  @override
-  final GeneratedDatabase attachedDatabase;
-  final String? _alias;
-  $ATodoDontTable(this.attachedDatabase, [this._alias]);
-  final VerificationMeta _idMeta = const VerificationMeta('id');
-  @override
-  late final GeneratedColumn<int> id = GeneratedColumn<int>(
-      'id', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
-  final VerificationMeta _textWithRestrictionsMeta =
-      const VerificationMeta('textWithRestrictions');
-  @override
-  late final GeneratedColumn<String> textWithRestrictions =
-      GeneratedColumn<String>(
-          'text_with_restrictions', aliasedName, false,
-          additionalChecks: GeneratedColumn.checkTextLength(
-              minTextLength: 6, maxTextLength: 32),
-          type: DriftSqlType.string,
-          requiredDuringInsert: true);
-  final VerificationMeta _realTestMeta = const VerificationMeta('realTest');
-  @override
-  late final GeneratedColumn<double> realTest = GeneratedColumn<double>(
-      'real_test', aliasedName, false,
-      type: DriftSqlType.double,
-      requiredDuringInsert: false,
-      defaultValue: const Constant(3.14));
-  final VerificationMeta _categoryMeta = const VerificationMeta('category');
-  @override
-  late final GeneratedColumn<int> category = GeneratedColumn<int>(
-      'category', aliasedName, true,
-      type: DriftSqlType.int, requiredDuringInsert: false);
-  final VerificationMeta _booleanTestMeta =
-      const VerificationMeta('booleanTest');
-  @override
-  late final GeneratedColumn<bool> booleanTest = GeneratedColumn<bool>(
-      'boolean_test', aliasedName, false,
-      type: DriftSqlType.bool,
-      requiredDuringInsert: true,
-      defaultConstraints: 'CHECK ("boolean_test" IN (0, 1))');
-  final VerificationMeta _dateTimeTestMeta =
-      const VerificationMeta('dateTimeTest');
-  @override
-  late final GeneratedColumn<DateTime> dateTimeTest = GeneratedColumn<DateTime>(
-      'date_time_test', aliasedName, false,
-      type: DriftSqlType.dateTime, requiredDuringInsert: true);
-  final VerificationMeta _blobTestMeta = const VerificationMeta('blobTest');
-  @override
-  late final GeneratedColumn<Uint8List> blobTest = GeneratedColumn<Uint8List>(
-      'blob_test', aliasedName, true,
-      type: DriftSqlType.blob, requiredDuringInsert: false);
-  @override
-  List<GeneratedColumn> get $columns => [
-        id,
-        textWithRestrictions,
-        realTest,
-        category,
-        booleanTest,
-        dateTimeTest,
-        blobTest
-      ];
-  @override
-  String get aliasedName => _alias ?? 'a_todo_dont';
-  @override
-  String get actualTableName => 'a_todo_dont';
-  @override
-  VerificationContext validateIntegrity(Insertable<ATodoDontData> instance,
-      {bool isInserting = false}) {
-    final context = VerificationContext();
-    final data = instance.toColumns(true);
-    if (data.containsKey('id')) {
-      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
-    }
-    if (data.containsKey('text_with_restrictions')) {
-      context.handle(
-          _textWithRestrictionsMeta,
-          textWithRestrictions.isAcceptableOrUnknown(
-              data['text_with_restrictions']!, _textWithRestrictionsMeta));
-    } else if (isInserting) {
-      context.missing(_textWithRestrictionsMeta);
-    }
-    if (data.containsKey('real_test')) {
-      context.handle(_realTestMeta,
-          realTest.isAcceptableOrUnknown(data['real_test']!, _realTestMeta));
-    }
-    if (data.containsKey('category')) {
-      context.handle(_categoryMeta,
-          category.isAcceptableOrUnknown(data['category']!, _categoryMeta));
-    }
-    if (data.containsKey('boolean_test')) {
-      context.handle(
-          _booleanTestMeta,
-          booleanTest.isAcceptableOrUnknown(
-              data['boolean_test']!, _booleanTestMeta));
-    } else if (isInserting) {
-      context.missing(_booleanTestMeta);
-    }
-    if (data.containsKey('date_time_test')) {
-      context.handle(
-          _dateTimeTestMeta,
-          dateTimeTest.isAcceptableOrUnknown(
-              data['date_time_test']!, _dateTimeTestMeta));
-    } else if (isInserting) {
-      context.missing(_dateTimeTestMeta);
-    }
-    if (data.containsKey('blob_test')) {
-      context.handle(_blobTestMeta,
-          blobTest.isAcceptableOrUnknown(data['blob_test']!, _blobTestMeta));
-    }
-    return context;
-  }
-
-  @override
-  Set<GeneratedColumn> get $primaryKey => {id};
-  @override
-  ATodoDontData map(Map<String, dynamic> data, {String? tablePrefix}) {
-    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return ATodoDontData(
-      id: attachedDatabase.options.types
-          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
-      textWithRestrictions: attachedDatabase.options.types.read(
-          DriftSqlType.string,
-          data['${effectivePrefix}text_with_restrictions'])!,
-      realTest: attachedDatabase.options.types
-          .read(DriftSqlType.double, data['${effectivePrefix}real_test'])!,
-      category: attachedDatabase.options.types
-          .read(DriftSqlType.int, data['${effectivePrefix}category']),
-      booleanTest: attachedDatabase.options.types
-          .read(DriftSqlType.bool, data['${effectivePrefix}boolean_test'])!,
-      dateTimeTest: attachedDatabase.options.types.read(
-          DriftSqlType.dateTime, data['${effectivePrefix}date_time_test'])!,
-      blobTest: attachedDatabase.options.types
-          .read(DriftSqlType.blob, data['${effectivePrefix}blob_test']),
-    );
-  }
-
-  @override
-  $ATodoDontTable createAlias(String alias) {
-    return $ATodoDontTable(attachedDatabase, alias);
-  }
-}
-
 abstract class _$MyDatabase extends GeneratedDatabase {
   _$MyDatabase(QueryExecutor e) : super(e);
   late final $TodosTable todos = $TodosTable(this);
   late final $ATodoDontTable aTodoDont = $ATodoDontTable(this);
   @override
-  Iterable<TableInfo<Table, dynamic>> get allTables =>
+  Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
   List<DatabaseSchemaEntity> get allSchemaEntities => [todos, aTodoDont];

@@ -1,6 +1,6 @@
 name: drift_local_storage_inspector
 description: A SQL local storage inspector implementation that exposes drift databases
-version: 0.5.0
+version: 0.6.0
 homepage: https://github.com/NicolaVerbeeck/drift_local_storage_inspector
 
 funding:
@@ -8,15 +8,15 @@ funding:
   - https://ko-fi.com/nicolaverbeeck
 
 environment:
-  sdk: ">=2.18.0 <3.0.0"
+  sdk: ">=3.0.0 <4.0.0"
 
 dependencies:
-  drift: ^2.4.2
+  drift: ^2.11.1
   flutter:
     sdk: flutter
-  storage_inspector: ^0.3.0
+  storage_inspector: ^0.4.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^2.0.1
+  flutter_lints: ^2.0.3
