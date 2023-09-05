@@ -1,3 +1,7 @@
+## 0.6.0
+
+* Support flutter_local_storage_inspector 0.4.0 and update the dart SDK constraint
+
 ## 0.5.0
 
 * Add support for drift 2.4.0
