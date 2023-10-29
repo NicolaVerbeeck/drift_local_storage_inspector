@@ -10,8 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       id-token: write # This is required for authentication using OIDC
-    with:
-      environment: 'pub.dev'
+    environment: 'pub.dev'
     steps:
       - uses: actions/checkout@v4
       - uses: subosito/flutter-action@v2
