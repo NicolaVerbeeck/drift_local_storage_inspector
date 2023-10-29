@@ -1,4 +1,5 @@
 import 'package:drift/drift.dart';
+import 'package:flutter/foundation.dart';
 import 'package:storage_inspector/storage_inspector.dart';
 
 /// Sorts tables based on their name
@@ -30,7 +31,7 @@ class DriftSQLDatabaseServer implements SQLDatabaseServer {
   final Future<String> schema;
 
   @override
-  Future<int?> get schemaVersion => Future.value(_database.schemaVersion);
+  Future<int?> get schemaVersion => SynchronousFuture(_database.schemaVersion);
 
   DriftSQLDatabaseServer({
     required this.id,
@@ -40,8 +41,8 @@ class DriftSQLDatabaseServer implements SQLDatabaseServer {
     void Function(List<SQLTableDefinition>)? tableSorter = _defaultTableSorter,
   })  : _database = database,
         schema = _buildSchema(database),
-        tables = Future.value(_buildTables(database, tableSorter)),
-        dateTimeFormat = Future.value(const DateTimeFormat(
+        tables = SynchronousFuture(_buildTables(database, tableSorter)),
+        dateTimeFormat = SynchronousFuture(const DateTimeFormat(
           accuracyInMicroSeconds: 1000000,
           timezoneOffsetMilliseconds: 0,
         ));

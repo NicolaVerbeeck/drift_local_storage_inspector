@@ -12,7 +12,9 @@ environment:
 
 dependencies:
   drift: ^2.13.0
+  flutter:
+    sdk: flutter
   storage_inspector: ^0.4.0
 
 dev_dependencies:
-  lints: ^3.0.0
+  flutter_lints: ^3.0.0
