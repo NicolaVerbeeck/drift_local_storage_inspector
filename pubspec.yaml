@@ -1,6 +1,6 @@
 name: drift_local_storage_inspector
 description: A SQL local storage inspector implementation that exposes drift databases
-version: 0.6.1
+version: 0.7.0
 homepage: https://github.com/NicolaVerbeeck/drift_local_storage_inspector
 
 funding:

@@ -81,9 +81,7 @@ class DriftSQLDatabaseServer implements SQLDatabaseServer {
   }) async {
     final numUpdated = await _database.customUpdate(
       query,
-      updates: _database.allTables
-          .where((element) => affectedTables.contains(element.actualTableName))
-          .toSet(),
+      updates: _database.allTables.where((element) => affectedTables.contains(element.actualTableName)).toSet(),
       variables: variables.map(_mapVariable).toList(),
     );
     return numUpdated;
@@ -141,27 +139,18 @@ SQLDataType _makeType(
   GeneratedColumn<dynamic> column,
 ) {
   final type = column.type;
-  switch (type) {
-    case DriftSqlType.bool:
-      return SQLDataType.boolean;
-    case DriftSqlType.string:
-      return SQLDataType.text;
-    case DriftSqlType.bigInt:
-      return SQLDataType.integer;
-    case DriftSqlType.int:
-      return SQLDataType.integer;
-    case DriftSqlType.dateTime:
-      return SQLDataType.datetime;
-    case DriftSqlType.blob:
-      return SQLDataType.blob;
-    case DriftSqlType.double:
-      return SQLDataType.real;
-    case DriftSqlType.any:
-      return SQLDataType.text;
-    case CustomSqlType<Object>():
-      // Custom types always map to text in the inspector.
-      return SQLDataType.text;
-  }
+  if (type is CustomSqlType) return SQLDataType.text;
+  return switch (type) {
+    DriftSqlType.bool => SQLDataType.boolean,
+    DriftSqlType.string => SQLDataType.text,
+    DriftSqlType.bigInt => SQLDataType.integer,
+    DriftSqlType.int => SQLDataType.integer,
+    DriftSqlType.dateTime => SQLDataType.datetime,
+    DriftSqlType.blob => SQLDataType.blob,
+    DriftSqlType.double => SQLDataType.real,
+    DriftSqlType.any => SQLDataType.text,
+    _ => SQLDataType.text,
+  };
 }
 
 Variable<Object> _mapVariable(

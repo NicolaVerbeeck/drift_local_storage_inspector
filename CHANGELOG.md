@@ -1,4 +1,4 @@
-## 0.6.1
+## 0.7.0
 
 * Add support for Drift 2.13.0 by handling the new CustomSQLType as text
 * Update dependencies
