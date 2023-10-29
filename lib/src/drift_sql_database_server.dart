@@ -158,6 +158,9 @@ SQLDataType _makeType(
       return SQLDataType.real;
     case DriftSqlType.any:
       return SQLDataType.text;
+    case CustomSqlType<Object>():
+      // Custom types always map to text in the inspector.
+      return SQLDataType.text;
   }
 }
 
