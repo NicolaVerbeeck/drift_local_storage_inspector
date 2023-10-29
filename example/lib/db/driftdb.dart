@@ -36,7 +36,7 @@ class ATodoDont extends Table {
 
 @DriftDatabase(tables: [Todos, ATodoDont])
 class MyDatabase extends _$MyDatabase {
-  MyDatabase(QueryExecutor e) : super(e);
+  MyDatabase(super.e);
 
   @override
   int get schemaVersion => 1;
