@@ -34,7 +34,7 @@ Future<void> main() async {
 class MyApp extends StatelessWidget {
   final MyDatabase db;
 
-  const MyApp({Key? key, required this.db}) : super(key: key);
+  const MyApp({super.key, required this.db});
 
   // This widget is the root of your application.
   @override
@@ -53,8 +53,7 @@ class MyHomePage extends StatefulWidget {
   final MyDatabase db;
   final String title;
 
-  const MyHomePage({Key? key, required this.title, required this.db})
-      : super(key: key);
+  const MyHomePage({super.key, required this.title, required this.db});
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
