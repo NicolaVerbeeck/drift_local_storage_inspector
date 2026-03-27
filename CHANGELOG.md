@@ -1,3 +1,10 @@
+## 0.8.0
+
+* Support flutter_local_storage_inspector 0.5.0
+* Update Drift dependency to 2.32.0
+* Update flutter_lints dev dependency to 6.0.0
+* Update the example app and its build tool versions
+
 ## 0.7.0
 
 * Add support for Drift 2.13.0 by handling the new CustomSQLType as text

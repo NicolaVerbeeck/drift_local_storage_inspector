@@ -5,7 +5,6 @@ analyzer:
     missing_required_param: error
     missing_return: error
     todo: ignore
-    sdk_version_async_exported_from_core: ignore
   exclude:
     - '**.mocks.dart'
     - 'test/coverage_helper_test.dart'
@@ -17,7 +16,6 @@ linter:
   rules:
     - unawaited_futures
     - always_declare_return_types
-    - unsafe_html
     - use_full_hex_values_for_flutter_colors
     - prefer_final_in_for_each
     - prefer_final_fields

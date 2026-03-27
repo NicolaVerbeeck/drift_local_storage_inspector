@@ -9,7 +9,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   final driver = StorageServerDriver(
-    bundleId: 'com.example.test',
+    bundleId: 'com.chimerapps.example',
     icon: '<some icon>',
   );
 
